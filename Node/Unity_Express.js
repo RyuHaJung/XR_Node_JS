@@ -5,8 +5,8 @@ let users = [
     { id: 0, data: "UserData"}              //배열안에 오브젝트
 ];
 
-let buildingUnderConstuction = null;
-//let buildingUnderConsturction[10][10] +  오브젝트 형태가 들어가게
+let buildingUnderConstuction  = null;       //시간 데이터를 저장한다. 
+//let buildingUnderConstuction[10][10] + 오브젝트 형태가 들어가게
 
 app.use(express.json());                   //json을 사용하겠다.
 
@@ -14,7 +14,7 @@ app.use(express.json());                   //json을 사용하겠다.
 //====================== GAME LOGIC ===========================
 
 app.post('/startConstruction' , (req, res) => {
-
+    
     const currentTime = new Date();             //스타트시 const로 시간을 고정해준다. DB ->로 저장할때는 형태 결정해야함
     const constructionTime = new Date(currentTime.getTime() + 10000); //현재 시간으로부터 10초뒤로 저장(건물 완성 10초)
     buildingUnderConstuction = constructionTime;                //완성 시간을 전역으로
@@ -33,7 +33,7 @@ app.post('/startConstruction' , (req, res) => {
 });
 
 app.get('/checkConstruction' , (req, res) => {
-    if(buildingUnderConstruction && new Date() >= buildingUnderConstruction)        //시간이 지났으면
+    if(buildingUnderConstuction && new Date() >= buildingUnderConstuction)        //시간이 지났으면
     {
         buildingUnderConstuction = null;                                           //시간 초기화
         let result = {
@@ -120,7 +120,7 @@ app.post('/userdata' , (req ,res) => {
     }
     else
     {
-        console.log(id, user.data);
+        console.log(id, user.data);   
         user.data = data;
         result.cmd = 1002;
         result.message = '데이터 갱신';
