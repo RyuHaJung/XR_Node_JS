@@ -67,6 +67,33 @@ app.post('/bag/add', (req, res) => {
 
 });
 
+app.post('/bag/remove', (req, res) => {
+    
+    console.log(req.body);
+    const {user_id , item_name} = req.body;
+    pool.getConnection((err, connection) => {
+        if(err)
+        {
+            res.status(500).json({error : '데이터베이스 연결 오류'})
+            return;
+        }
+
+        //MySQL 쿼리 실행
+        connection.query('DELETE FROM `GameDB`.`bags` WHERE user_id = ? AND item_name = ?' 
+        , [user_id, item_name] , (queryErr, result) =>{
+            connection.release();
+            if(queryErr)
+            {
+                res.status(500).json({error : '쿼리 오류'});
+                return;
+            }
+            res.json({message : ' 아이템 삭제 성공'});
+        });
+        
+    });
+
+});
+
 const PORT = 3000;
 app.listen(PORT , ()=>{
     console.log('server is running at 3030 port');
